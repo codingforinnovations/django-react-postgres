@@ -1,0 +1,16 @@
+root = true
+
+[*.{js,py}]
+charset = utf-8
+
+[*.py]
+indent_style = space
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+# Indentation override for all JS under lib directory
+[*.js,*.ts,*.jsx,*.tsx,*.yaml,*.yml,*.json,*.conf]
+indent_style = space
+indent_size = 2
