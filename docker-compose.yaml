@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  backend:
+    container_name: backend
+    build: 
+      context: .
+      dockerfile: apps/docker/backend/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./.env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  frontend:
+    container_name: frontend
+    build: 
+      context: .
+      dockerfile: apps/docker/frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - node_modules:/apps/frontend/node_modules
+    env_file:
+      - ./.env
+
+  nginx:
+    container_name: nginx
+    build: 
+      context: .
+      dockerfile: apps/docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - static:/apps/backend/static
+
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  db-data:
+  node_modules:
+  static:
